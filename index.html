@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ma journée à moi 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FDF6EC;
+    --blush: #F2C4B0;
+    --rose: #E8907A;
+    --mauve: #C17B8A;
+    --deep: #6B3D4A;
+    --sage: #A8B89A;
+    --lavender: #C4BBDA;
+    --gold: #D4A853;
+    --text: #3A2530;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 10% 20%, rgba(242,196,176,0.35) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(196,187,218,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(168,184,154,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .date-badge {
+    display: inline-block;
+    background: var(--deep);
+    color: var(--cream);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    color: var(--deep);
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  h1 em {
+    color: var(--rose);
+    font-style: italic;
+  }
+
+  .subtitle {
+    color: var(--mauve);
+    font-size: 15px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  /* Mood selector */
+  .mood-section {
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mauve);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .moods {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .mood-btn {
+    background: white;
+    border: 1.5px solid rgba(193,123,138,0.25);
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .mood-btn:hover {
+    border-color: var(--rose);
+    background: rgba(242,196,176,0.15);
+    transform: translateY(-2px);
+  }
+
+  .mood-btn.active {
+    background: var(--deep);
+    border-color: var(--deep);
+    color: var(--cream);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107,61,74,0.25);
+  }
+
+  /* Activity cards grid */
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px 20px;
+    border: 1px solid rgba(193,123,138,0.12);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--card-accent), transparent);
+    opacity: 0.8;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(107,61,74,0.12);
+    border-color: rgba(193,123,138,0.3);
+  }
+
+  .card.done {
+    opacity: 0.6;
+    background: #fafafa;
+  }
+
+  .card.done::after {
+    content: '✓ Fait !';
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--sage);
+    color: white;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .card-emoji {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--deep);
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: #8A7A82;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .card-time {
+    margin-top: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  /* Timer */
+  .timer-section {
+    background: var(--deep);
+    border-radius: 24px;
+    padding: 30px;
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 30px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .timer-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 10px;
+  }
+
+  .timer-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 20px;
+    letter-spacing: -2px;
+  }
+
+  .timer-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .timer-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--cream);
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .timer-btn:hover { background: rgba(255,255,255,0.22); }
+  .timer-btn.primary { background: var(--rose); border-color: var(--rose); }
+  .timer-btn.primary:hover { background: #d97c65; }
+
+  .timer-presets {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .preset-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.6);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .preset-btn:hover { color: white; border-color: rgba(255,255,255,0.5); }
+
+  /* Quote section */
+  .quote-card {
+    background: linear-gradient(135deg, var(--blush), var(--lavender));
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 30px;
+    animation: fadeUp 0.8s 0.5s ease both;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .quote-card:hover { transform: scale(1.02); }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--deep);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .quote-hint {
+    font-size: 11px;
+    color: var(--mauve);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Progress bar */
+  .progress-section {
+    margin-bottom: 30px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-bar-bg {
+    background: rgba(193,123,138,0.15);
+    border-radius: 10px;
+    height: 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--rose), var(--mauve));
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Message from boyfriend */
+  .message-card {
+    background: white;
+    border: 2px solid rgba(232,144,122,0.3);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 30px;
+    animation: fadeUp 0.8s 0.6s ease both;
+    position: relative;
+  }
+
+  .message-tag {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--rose);
+    color: white;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 10px;
+  }
+
+  .message-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--deep);
+    line-height: 1.7;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .pop { animation: pop 0.3s ease; }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    animation: confettiFall 2s ease-in both;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* No activities message */
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--mauve);
+    font-style: italic;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <header>
+    <div class="date-badge" id="dateBadge">Chargement...</div>
+    <h1>Ma journée <em>à moi</em> 🌸</h1>
+    <p class="subtitle">Parce que chaque journée mérite d'être belle</p>
+  </header>
+
+  <!-- Message from boyfriend -->
+  <div class="message-card">
+    <div class="message-tag">💌 Pour toi</div>
+    <p class="message-text">"Hey toi... Je suis au taf mais je pense à toi. Cette appli c'est pour que ta journée soit belle. Je t'aime fort 🫶"</p>
+  </div>
+
+  <!-- Quote -->
+  <div class="quote-card" onclick="newQuote()">
+    <p class="quote-text" id="quoteText">...</p>
+    <p class="quote-hint">Clique pour une nouvelle citation ✨</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="section-label">Progression de la journée</span>
+      <span style="font-size:13px; color:var(--mauve)" id="progressText">0 activité</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Mood -->
+  <div class="mood-section">
+    <div class="section-label">Comment tu te sens ?</div>
+    <div class="moods" id="moodBtns">
+      <button class="mood-btn active" data-mood="all" onclick="filterMood('all', this)">✨ Tout voir</button>
+      <button class="mood-btn" data-mood="relax" onclick="filterMood('relax', this)">😴 Relax</button>
+      <button class="mood-btn" data-mood="creative" onclick="filterMood('creative', this)">🎨 Créative</button>
+      <button class="mood-btn" data-mood="active" onclick="filterMood('active', this)">💪 Active</button>
+      <button class="mood-btn" data-mood="fun" onclick="filterMood('fun', this)">🎉 Fun</button>
+      <button class="mood-btn" data-mood="self" onclick="filterMood('self', this)">🌿 Bien-être</button>
+    </div>
+  </div>
+
+  <!-- Activities -->
+  <div class="activities-grid" id="activitiesGrid"></div>
+  <div class="empty-state" id="emptyState">Aucune activité pour cette humeur... change de filtre ! 🌸</div>
+
+  <!-- Timer -->
+  <div class="timer-section">
+    <div class="timer-label">⏱ Mon minuteur</div>
+    <div class="timer-display" id="timerDisplay">25:00</div>
+    <div class="timer-controls">
+      <button class="timer-btn primary" onclick="startTimer()">▶ Démarrer</button>
+      <button class="timer-btn" onclick="pauseTimer()">⏸ Pause</button>
+      <button class="timer-btn" onclick="resetTimer()">↺ Reset</button>
+    </div>
+    <div class="timer-presets">
+      <button class="preset-btn" onclick="setTimer(5)">5 min</button>
+      <button class="preset-btn" onclick="setTimer(10)">10 min</button>
+      <button class="preset-btn" onclick="setTimer(25)">25 min</button>
+      <button class="preset-btn" onclick="setTimer(45)">45 min</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== DATA =====
+const activities = [
+  { id:1, emoji:'📚', title:'Lecture plaisir', desc:'20 pages d\'un livre que t\'as envie de finir', time:'30 min', mood:'relax' },
+  { id:2, emoji:'🧘', title:'Yoga doux', desc:'Une séance Youtube pour déstresser et s\'étirer', time:'20 min', mood:'self' },
+  { id:3, emoji:'🎨', title:'Dessin libre', desc:'Prends une feuille et dessine ce qui te passe par la tête', time:'45 min', mood:'creative' },
+  { id:4, emoji:'🍳', title:'Recette surprise', desc:'Tente une nouvelle recette sympa à faire ensemble ce soir', time:'1h', mood:'fun' },
+  { id:5, emoji:'🎬', title:'Série ou film', desc:'Un épisode (ou deux, on te juge pas 😄)', time:'45 min', mood:'relax' },
+  { id:6, emoji:'💅', title:'Soin & beauté', desc:'Masque, vernis, routine beauté... chouchoute-toi !', time:'30 min', mood:'self' },
+  { id:7, emoji:'🎵', title:'Playlist & danse', desc:'Fais une playlist de tes sons du moment et danse', time:'20 min', mood:'active' },
+  { id:8, emoji:'📝', title:'Journaling', desc:'Écris ce que tu ressens, tes rêves, tes projets', time:'15 min', mood:'self' },
+  { id:9, emoji:'🏃', title:'Marche fraîche', desc:'Sortir 30 min au grand air pour se dégourdir', time:'30 min', mood:'active' },
+  { id:10, emoji:'🧩', title:'Puzzle ou jeu', desc:'Sudoku, mots croisés, jeu sur le phone', time:'30 min', mood:'fun' },
+  { id:11, emoji:'✍️', title:'Écriture créative', desc:'Écris le début d\'une histoire inventée par toi', time:'45 min', mood:'creative' },
+  { id:12, emoji:'🌿', title:'Plantes & nature', desc:'Arrose tes plantes ou va observer la nature dehors', time:'20 min', mood:'self' },
+  { id:13, emoji:'🎮', title:'Jeu vidéo', desc:'Lance un jeu sympa et profites-en !', time:'1h', mood:'fun' },
+  { id:14, emoji:'🖼️', title:'Pinterest & inspiration', desc:'Crée un moodboard de tes envies et projets', time:'25 min', mood:'creative' },
+  { id:15, emoji:'🏠', title:'Déco & rangement zen', desc:'Réaménage un petit coin de la maison à ton goût', time:'45 min', mood:'active' },
+  { id:16, emoji:'🧁', title:'Pâtisserie', desc:'Fais des petits gâteaux ou cookies pour ce soir 🍪', time:'1h', mood:'creative' },
+  { id:17, emoji:'🎧', title:'Podcast passionnant', desc:'Écoute un podcast sur un sujet qui t\'intrigue', time:'30 min', mood:'relax' },
+  { id:18, emoji:'🛁', title:'Bain bien-être', desc:'Bain chaud avec bougies et musique douce', time:'45 min', mood:'self' },
+  { id:19, emoji:'📸', title:'Séance photo', desc:'Shoote des trucs sympas dans la maison ou dehors', time:'30 min', mood:'creative' },
+  { id:20, emoji:'💌', title:'Message surprise', desc:'Envoie un message adorable à quelqu\'un que tu aimes', time:'10 min', mood:'fun' },
+];
+
+const quotes = [
+  "La vie est faite de petits bonheurs qu'il faut savoir attraper au vol.",
+  "Prends soin de toi comme si tu étais ton propre trésor.",
+  "Chaque journée est une nouvelle page à écrire.",
+  "Le bonheur ne se cherche pas, il se crée.",
+  "Les jours calmes sont aussi importants que les jours intenses.",
+  "Sois douce avec toi-même, tu fais de ton mieux.",
+  "Même une petite joie est une grande victoire.",
+  "Le silence a ses propres mots, écoute-les.",
+  "Une tasse de thé et un bon livre valent tous les voyages.",
+  "Ton énergie est précieuse — dépense-la sur ce qui compte.",
+];
+
+let doneIds = JSON.parse(localStorage.getItem('doneIds') || '[]');
+let currentMood = 'all';
+let timerInterval = null;
+let timerSeconds = 25 * 60;
+let timerRunning = false;
+
+// ===== INIT =====
+function init() {
+  // Date
+  const now = new Date();
+  const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+  const months = ['jan','fév','mar','avr','mai','juin','juil','aoû','sep','oct','nov','déc'];
+  document.getElementById('dateBadge').textContent = 
+    `${days[now.getDay()]} ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+  newQuote();
+  renderActivities();
+}
+
+function newQuote() {
+  const q = quotes[Math.floor(Math.random() * quotes.length)];
+  const el = document.getElementById('quoteText');
+  el.style.opacity = 0;
+  setTimeout(() => {
+    el.textContent = `« ${q} »`;
+    el.style.opacity = 1;
+    el.style.transition = 'opacity 0.4s ease';
+  }, 200);
+}
+
+function filterMood(mood, btn) {
+  currentMood = mood;
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderActivities();
+}
+
+function renderActivities() {
+  const grid = document.getElementById('activitiesGrid');
+  const empty = document.getElementById('emptyState');
+  const filtered = currentMood === 'all' ? activities : activities.filter(a => a.mood === currentMood);
+  
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const colors = { relax:'#E8907A', creative:'#C4BBDA', active:'#A8B89A', fun:'#D4A853', self:'#C17B8A' };
+  
+  grid.innerHTML = filtered.map((a, i) => `
+    <div class="card ${doneIds.includes(a.id) ? 'done' : ''}" 
+         style="--card-accent:${colors[a.mood] || '#E8907A'}; animation-delay:${i*0.06}s"
+         onclick="toggleDone(${a.id}, this)">
+      <span class="card-emoji">${a.emoji}</span>
+      <div class="card-title">${a.title}</div>
+      <div class="card-desc">${a.desc}</div>
+      <div class="card-time">⏱ ${a.time}</div>
+    </div>
+  `).join('');
+
+  updateProgress();
+}
+
+function toggleDone(id, card) {
+  if (doneIds.includes(id)) {
+    doneIds = doneIds.filter(d => d !== id);
+    card.classList.remove('done');
+  } else {
+    doneIds.push(id);
+    card.classList.add('done');
+    if (doneIds.length % 3 === 0) launchConfetti();
+  }
+  localStorage.setItem('doneIds', JSON.stringify(doneIds));
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = activities.length;
+  const done = doneIds.length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = 
+    done === 0 ? 'Prête à commencer ?' : 
+    done === total ? '🎉 Toutes faites !' : 
+    `${done} / ${total} activités`;
+}
+
+// ===== TIMER =====
+function setTimer(min) {
+  timerSeconds = min * 60;
+  timerRunning = false;
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+}
+
+function startTimer() {
+  if (timerRunning) return;
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    if (timerSeconds <= 0) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      document.getElementById('timerDisplay').textContent = '🎉 Bravo !';
+      launchConfetti();
+      return;
+    }
+    timerSeconds--;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 25 * 60;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+  const s = (timerSeconds % 60).toString().padStart(2, '0');
+  document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+}
+
+// ===== CONFETTI =====
+function launchConfetti() {
+  const colors = ['#E8907A','#C17B8A','#A8B89A','#C4BBDA','#D4A853','#F2C4B0'];
+  for (let i = 0; i < 30; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.top = '-10px';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDelay = Math.random() * 0.5 + 's';
+    el.style.animationDuration = (1.5 + Math.random()) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
